@@ -7,4 +7,4 @@ RUN_HOST=${HOST:-0.0.0.0}
 cd /code
 
 # gunicorn -k uvicorn.workers.UvicornWorker -b $RUN_HOST:$RUN_PORT src.main:app
-uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn main:app --host ${RUN_HOST} --port ${RUN_PORT} --reload

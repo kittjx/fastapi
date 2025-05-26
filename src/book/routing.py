@@ -1,16 +1,15 @@
 from fastapi import APIRouter
-from pydantic import BaseModel, Field
+from sqlmodel.ext.asyncio.session import AsyncSession
+from fastapi import Depends
+
+from db.session import get_async_session
+from .model import Book
 
 book_router = APIRouter(
     prefix="/book",
     tags=["book"],
     responses={404: {"description": "Not found"}},
 )
-
-class Book(BaseModel):
-    title: str = Field(..., min_length=3, max_length=255)
-    author: str = Field(..., min_length=3, max_length=255)
-    year: int = Field(..., ge=1000, le=2025)
 
 @book_router.get("/")
 async def list_books():
@@ -20,9 +19,12 @@ async def list_books():
 async def get_book(book_id: int):
     return {"message": f"get book {book_id}"}
 
-@book_router.post("/")
-async def create_book(book: Book):
-    return {"message": f"create book {book.title}"}
+@book_router.post("/", response_model=Book)
+async def create_book(book: Book, session: AsyncSession = Depends(get_async_session)):
+    session.add(book)
+    await session.commit()
+    await session.refresh(book)
+    return book
 
 @book_router.put("/{book_id}")
 async def create_book(book: Book):
