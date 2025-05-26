@@ -6,7 +6,13 @@ from sqlalchemy.orm import sessionmaker
 
 DB_URL = os.environ["DB_URL"]
 
-async_engine: AsyncEngine = create_async_engine(DB_URL, echo=True)
+async_engine: AsyncEngine = create_async_engine(
+    DB_URL, 
+    pool_size=10,
+    max_overflow=20,
+    pool_timeout=30,
+    echo=True
+)
 
 async_session = sessionmaker(
     bind=async_engine,
