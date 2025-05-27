@@ -22,6 +22,7 @@ services:
       POSTGRES_DB: fastapi
       POSTGRES_USER: fastapi
       POSTGRES_PASSWORD: fastapi
+      TZ: Asia/Shanghai
     volumes:
       - ./db_data:/var/lib/postgresql/data
     ports:
