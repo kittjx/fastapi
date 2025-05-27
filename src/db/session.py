@@ -4,7 +4,9 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine
 from sqlalchemy.orm import sessionmaker
 
-DB_URL = os.environ["DB_URL"]
+DB_URL = os.environ.get("DB_URL")
+if not DB_URL:
+    raise ValueError("DB_URL is not set")
 
 async_engine: AsyncEngine = create_async_engine(
     DB_URL, 
