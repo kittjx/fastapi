@@ -3,10 +3,9 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from db.session import get_async_session
-from .model import Book
+from db.session import DBSession
 
-DBSession = Annotated[AsyncSession, Depends(get_async_session)]
+from .model import Book
 
 book_router = APIRouter(
     prefix="/book",
