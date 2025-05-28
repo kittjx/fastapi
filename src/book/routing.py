@@ -1,7 +1,6 @@
-from typing import Annotated, Any, Dict
-from fastapi import APIRouter, HTTPException, Depends
+from typing import Any, Dict
+from fastapi import APIRouter, HTTPException
 from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 from db.session import DBSession
 
@@ -59,3 +58,4 @@ async def delete_book(book_id: int, session: DBSession):
     await session.delete(db_book)
     await session.commit()
     return db_book
+
