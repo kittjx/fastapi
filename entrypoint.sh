@@ -15,9 +15,9 @@ if [ ! -d "migrations" ]; then
 fi
 
 # Check if database is initialized
-if ! aerich history | grep -q "No history"; then
+if [ -d "migrations/models" ] && [ "$(ls -A migrations/models)" ]; then
   echo "Upgrading database..."
-  aerich upgrade
+  aerich upgrade || aerich init-db  # Fallback to init-db if upgrade fails
 else
   echo "Initializing database..."
   aerich init-db

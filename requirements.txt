@@ -2,3 +2,4 @@ fastapi
 uvicorn
 tortoise-orm[asyncpg]
 aerich
+tomlkit
