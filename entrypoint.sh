@@ -15,12 +15,12 @@ if [ ! -d "migrations" ]; then
 fi
 
 # Check if database is initialized
-if ! aerich heads | grep -q "[0-9]"; then
-  echo "Initializing database..."
-  aerich init-db
-else
+if ! aerich history | grep -q "No history"; then
   echo "Upgrading database..."
   aerich upgrade
+else
+  echo "Initializing database..."
+  aerich init-db
 fi
 
 # Start the application
