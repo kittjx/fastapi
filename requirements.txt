@@ -1,8 +1,4 @@
 fastapi
 uvicorn
-gunicorn
-sqlmodel
-pydantic
-sqlalchemy
-timescaledb
-asyncpg
+tortoise-orm[asyncpg]
+aerich

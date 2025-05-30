@@ -1,17 +1,15 @@
 from fastapi import FastAPI
-from book.routing import book_router
 
 from contextlib import asynccontextmanager
 
-from db.session import init_db, async_engine
+from core.db import init_db, close_db
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await init_db()
+    await init_db(app)
     yield
-    await async_engine.dispose()
+    await close_db()
 
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(book_router)
