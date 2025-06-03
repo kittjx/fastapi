@@ -4,7 +4,7 @@ from sqlmodel import select
 
 from db.session import DBSession
 
-from .model import Book
+from .model import Book, BookUpdate
 
 book_router = APIRouter(
     prefix="/book",
@@ -20,7 +20,11 @@ async def list_books(session: DBSession):
 
 @book_router.get("/{book_id}", response_model=Book)
 async def get_book(book_id: int, session: DBSession):
+    # optimized for primary key
     book = await session.get(Book, book_id)
+    # general query
+    # result = await session.exec(select(Book).where(Book.id == book_id))
+    # book = result.one_or_none()
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
     return book
@@ -33,16 +37,12 @@ async def create_book(book: Book, session: DBSession):
     return book
 
 @book_router.put("/{book_id}", response_model=Book)
-async def update_book(book_id: int, updates: Dict[str, Any], session: DBSession):
+async def update_book(book_id: int, book_update: BookUpdate, session: DBSession):
     db_book = await session.get(Book, book_id)
     if not db_book:
         raise HTTPException(status_code=404, detail="Book not found")
     
-    valid_fields = Book.__annotations__.keys()
-    for field in updates.keys():
-        if field not in valid_fields:
-            raise HTTPException(status_code=400, detail=f"Invalid field: {field}")
-    
+    updates = book_update.model_dump(exclude_unset=True)
     for field, value in updates.items():
         setattr(db_book, field, value)
 
