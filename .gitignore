@@ -1,2 +1,5 @@
 db_data
 **/.DS_Store
+__pycache__
+migrations
+.vscode
