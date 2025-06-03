@@ -15,7 +15,7 @@ services:
         condition: service_healthy
 
   db:
-    image: timescale/timescaledb:latest-pg17
+    image: postgres:17-alpine
     container_name: fastapi-db
     restart: always
     environment:

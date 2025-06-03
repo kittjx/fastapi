@@ -4,5 +4,4 @@ gunicorn
 sqlmodel
 pydantic
 sqlalchemy
-timescaledb
 asyncpg
