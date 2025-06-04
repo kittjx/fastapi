@@ -1,8 +1,8 @@
-"""initial migration
+"""create table
 
-Revision ID: 7daa9f657312
+Revision ID: 47551dd9ca8e
 Revises: 
-Create Date: 2025-06-04 16:24:55.065420
+Create Date: 2025-06-04 22:17:35.016946
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = '7daa9f657312'
+revision: str = '47551dd9ca8e'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -27,8 +27,8 @@ def upgrade() -> None:
     sa.Column('title', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=False),
     sa.Column('author', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=False),
     sa.Column('year', sa.Integer(), nullable=False),
-    sa.Column('create_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.Column('update_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user',
