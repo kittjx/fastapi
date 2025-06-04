@@ -20,15 +20,12 @@ services:
     image: postgres:17-alpine
     container_name: fastapi-db
     restart: always
-    environment:
-      POSTGRES_DB: fastapi
-      POSTGRES_USER: fastapi
-      POSTGRES_PASSWORD: fastapi
-      TZ: Asia/Shanghai
+    env_file:
+      - .env
     volumes:
       - ./db_data:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U fastapi -d fastapi"]
       interval: 5s
