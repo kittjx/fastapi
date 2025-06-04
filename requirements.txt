@@ -1,7 +1,7 @@
 fastapi
 uvicorn
-gunicorn
 sqlmodel
 pydantic
 sqlalchemy
 asyncpg
+alembic

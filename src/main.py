@@ -1,14 +1,15 @@
 from fastapi import FastAPI
-from book.routing import book_router
+from book.router import book_router
 
 from contextlib import asynccontextmanager
 
-from db.session import init_db, async_engine
+from db.session import async_engine
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await init_db()
+    # use alembic to do the migrations
+    # await init_db()
     yield
     await async_engine.dispose()
 

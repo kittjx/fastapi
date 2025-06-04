@@ -5,7 +5,9 @@ services:
     container_name: fastapi-app
     restart: always
     volumes:
-      - ./src:/code
+      - ./src:/code/src
+      - ./alembic:/code/alembic
+      - ./alembic.ini:/code/alembic.ini
     ports:
       - 8000:8000
     env_file:

@@ -24,9 +24,10 @@ async_session = sessionmaker(
     expire_on_commit=False
 )
 
-async def init_db():
-    async with async_engine.begin() as conn:
-        await conn.run_sync(SQLModel.metadata.create_all)
+# use alembic to do the migration
+# async def init_db():
+#     async with async_engine.begin() as conn:
+#         await conn.run_sync(SQLModel.metadata.create_all)
 
 async def get_async_session():
     async with async_session() as session:
