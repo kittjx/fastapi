@@ -5,3 +5,6 @@ pydantic
 sqlalchemy
 asyncpg
 alembic
+passlib[bcrypt]
+python-jose[cryptography]
+python-multipart

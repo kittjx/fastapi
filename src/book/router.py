@@ -1,10 +1,12 @@
 from typing import Any, Dict
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import select
 
 from db.session import DBSession
 
 from .model import Book, BookUpdate
+from auth.auth import get_current_user
+from user.model import User
 
 book_router = APIRouter(
     prefix="/book",
@@ -30,7 +32,7 @@ async def get_book(book_id: int, session: DBSession):
     return book
 
 @book_router.post("/", response_model=Book)
-async def create_book(book: Book, session: DBSession):
+async def create_book(book: Book, session: DBSession, current_user: User = Depends(get_current_user)):
     session.add(book)
     await session.commit()
     await session.refresh(book)
