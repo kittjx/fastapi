@@ -27,9 +27,7 @@ async def create_user(user: UserCreate, session: DBSession):
         raise HTTPException(status_code=400, detail=f"User {user.username} already registered")
 
     new_user = User(
-        email=user.email,
-        username=user.username,
-        phone=user.phone,
+        **user.model_dump(exclude={"password"}),
         passwd_hash=get_passwd_hash(user.password)
     )
     session.add(new_user)
