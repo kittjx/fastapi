@@ -1,12 +1,11 @@
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import select
 
 from db.session import DBSession
 from auth.auth import authenticate_user, create_access_token, get_current_user, get_passwd_hash
-from auth.model import Token
+from auth.model import Token, UserLogin
 from user.model import User, UserCreate
 
 from auth.auth import ACCESS_TOKEN_EXPIRE_MINUTES
@@ -39,9 +38,9 @@ async def create_user(user: UserCreate, session: DBSession):
 @auth_router.post("/login", response_model=Token)
 async def login(
     session: DBSession,
-    form_data: OAuth2PasswordRequestForm = Depends()
+    user: UserLogin
 ):
-    user = await authenticate_user(session, form_data.username, form_data.password)
+    user = await authenticate_user(session, user.username, user.password)
     if not user:
         raise HTTPException(status_code=401, detail="Incorrect username or password")
     

@@ -10,3 +10,6 @@ class Token(SQLModel):
 class TokenData(SQLModel):
     username: Optional[str] = None
 
+class UserLogin(SQLModel):
+    username: str
+    password: str
