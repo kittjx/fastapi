@@ -15,7 +15,7 @@ book_router = APIRouter(
 )
 
 @book_router.get("/", response_model=list[Book])
-async def list_books(session: DBSession):
+async def list_books(session: DBSession, user: User = Depends(get_current_user)):
     result = await session.exec(select(Book))
     books = result.all()
     return books

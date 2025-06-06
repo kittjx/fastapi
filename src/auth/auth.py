@@ -5,18 +5,20 @@ from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from sqlmodel import select
 
-from jose import jwt, JWSError
+from jose import jwt, JWTError
 
 from db.session import DBSession
 from auth.model import TokenData
 from user.model import User
 
-SECRET_KEY = "your-secret-key-here"
+import os
+SECRET_KEY = os.getenv("SECRET_KEY")
+
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 def get_passwd_hash(password: str) -> str:
     return pwd_context.hash(password)
@@ -49,11 +51,11 @@ async def get_current_user(session: DBSession, token: str = Depends(oauth2_schem
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
+        username: str = payload.get("username")
         if username is None:
             raise credential_exception
         token_data = TokenData(username=username)
-    except JWSError:
+    except JWTError:
         raise credential_exception
     
     result = await session.exec(select(User).where(User.username == username))

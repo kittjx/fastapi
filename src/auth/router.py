@@ -45,7 +45,7 @@ async def login(
         raise HTTPException(status_code=401, detail="Incorrect username or password")
     
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": user.username}, expires_delta=access_token_expires)
+    access_token = create_access_token(data={"username": user.username}, expires_delta=access_token_expires)
     return {"access_token": access_token, "token_type": "bearer"}
 
 @auth_router.get("/me", response_model=User)
