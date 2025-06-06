@@ -41,7 +41,6 @@ async def login(
     session: DBSession,
     form_data: OAuth2PasswordRequestForm = Depends()
 ):
-    print(form_data.username, form_data.password)
     user = await authenticate_user(session, form_data.username, form_data.password)
     if not user:
         raise HTTPException(status_code=401, detail="Incorrect username or password")
