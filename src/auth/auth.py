@@ -12,7 +12,7 @@ from auth.model import TokenData
 from user.model import User
 
 import os
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", "BdvXAT8C7Ij5GixGsvGc_QyFG7n9E5B5KVB25b4eTGk")
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
