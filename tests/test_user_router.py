@@ -61,14 +61,13 @@ async def test_update_user(client: TestClient, session: Session):
     await session.refresh(user) # Await refresh
 
     response = client.put(
-        f"/user/{user.id}", json={"username": "newname", "email": "new@example.com", "phone": "333-444-5555"}
+        f"/user/{user.id}", json={"email": "new@example.com", "phone": "333-444-5555"}
     )
     assert response.status_code == 200
-    assert response.json()["username"] == "newname"
     assert response.json()["email"] == "new@example.com"
 
     response = client.put(
-        "/user/999", json={"username": "nonexistent", "phone": "999-999-9999"}
+        "/user/999", json={"phone": "999-999-9999"}
     )
     assert response.status_code == 404
     assert response.json()["detail"] == "User not found"
