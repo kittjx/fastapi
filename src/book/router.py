@@ -5,7 +5,7 @@ from sqlmodel import select
 from db.session import DBSession
 
 from .model import Book, BookUpdate
-from auth.auth import get_current_user
+from auth.auth import get_current_user, RequirePermission
 from user.model import User
 
 book_router = APIRouter(
@@ -32,7 +32,11 @@ async def get_book(book_id: int, session: DBSession):
     return book
 
 @book_router.post("/", response_model=Book)
-async def create_book(book: Book, session: DBSession, current_user: User = Depends(get_current_user)):
+async def create_book(
+    book: Book, 
+    session: DBSession, 
+    current_user: User = Depends(RequirePermission("book.write"))):
+
     session.add(book)
     await session.commit()
     await session.refresh(book)
@@ -53,7 +57,11 @@ async def update_book(book_id: int, book_update: BookUpdate, session: DBSession)
     return db_book
 
 @book_router.delete("/{book_id}", response_model=Book)
-async def delete_book(book_id: int, session: DBSession):
+async def delete_book(
+    book_id: int, 
+    session: DBSession, 
+    current_user: User = Depends(RequirePermission("book.delete"))):
+
     db_book = await session.get(Book, book_id)
     if not db_book:
         raise HTTPException(status_code=404, detail="Book not found")
