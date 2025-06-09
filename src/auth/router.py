@@ -3,12 +3,12 @@ from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import select
 
-from db.session import DBSession
-from auth.auth import authenticate_user, create_access_token, get_current_user, get_passwd_hash
-from auth.model import Token, UserLogin
-from user.model import User, UserCreate
+from src.db.session import DBSession
+from src.auth.auth import authenticate_user, create_access_token, get_current_user, get_passwd_hash
+from src.auth.model import Token, UserLogin
+from src.user.model import User, UserCreate
 
-from auth.auth import ACCESS_TOKEN_EXPIRE_MINUTES
+from src.auth.auth import ACCESS_TOKEN_EXPIRE_MINUTES
 
 auth_router = APIRouter(
     prefix="/auth",
@@ -19,8 +19,7 @@ auth_router = APIRouter(
 
 @auth_router.post("/register", response_model=User)
 async def create_user(user: UserCreate, session: DBSession):
-    result = await session.exec(
-        select(User).where(User.username == user.username))
+    result = await session.exec(select(User).where(User.username == user.username))
     db_user = result.one_or_none()
     if db_user:
         raise HTTPException(status_code=400, detail=f"User {user.username} already registered")

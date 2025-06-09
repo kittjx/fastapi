@@ -2,9 +2,9 @@
 from fastapi import APIRouter, HTTPException
 from sqlmodel import select
 
-from db.session import DBSession
-from user.model import User, UserUpdate, Role
-from auth.auth import assign_role_to_user, remove_role_from_user, get_user_roles
+from src.db.session import DBSession
+from src.user.model import User, UserUpdate, Role
+from src.auth.auth import assign_role_to_user, remove_role_from_user, get_user_roles
 
 
 user_router = APIRouter(

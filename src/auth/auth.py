@@ -8,9 +8,9 @@ from sqlmodel import select
 
 from jose import jwt, JWTError
 
-from db.session import DBSession
-from auth.model import TokenData
-from user.model import Permission, Role, RolePermissionLink, User, UserRoleLink
+from src.db.session import DBSession
+from src.auth.model import TokenData
+from src.user.model import Permission, Role, RolePermissionLink, User, UserRoleLink
 from sqlalchemy.orm import selectinload # Import selectinload
 
 import os

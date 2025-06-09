@@ -8,6 +8,6 @@ cd /code
 echo "Running database migrations..."
 alembic upgrade head
 
-cd /code/src
+# cd /code/src
 echo "Starting application..."
-uvicorn main:app --host ${RUN_HOST} --port ${RUN_PORT} --reload
+uvicorn src.main:app --host ${RUN_HOST} --port ${RUN_PORT} --reload

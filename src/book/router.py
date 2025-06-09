@@ -2,11 +2,11 @@ from typing import Any, Dict
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import select
 
-from db.session import DBSession
+from src.db.session import DBSession
 
-from .model import Book, BookUpdate
-from auth.auth import get_current_user, RequirePermission
-from user.model import User
+from src.book.model import Book, BookUpdate
+from src.auth.auth import get_current_user, RequirePermission
+from src.user.model import User
 
 book_router = APIRouter(
     prefix="/book",
@@ -68,4 +68,3 @@ async def delete_book(
     await session.delete(db_book)
     await session.commit()
     return db_book
-

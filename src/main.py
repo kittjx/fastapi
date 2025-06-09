@@ -1,11 +1,11 @@
 from fastapi import FastAPI
-from book.router import book_router
-from user.router import user_router
-from auth.router import auth_router
+from src.book.router import book_router
+from src.user.router import user_router
+from src.auth.router import auth_router
 
 from contextlib import asynccontextmanager
 
-from db.session import async_engine
+from src.db.session import async_engine
 
 
 @asynccontextmanager
