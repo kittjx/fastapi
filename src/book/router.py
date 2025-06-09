@@ -15,14 +15,21 @@ book_router = APIRouter(
 )
 
 @book_router.get("/", response_model=list[Book])
-async def list_books(session: DBSession, user: User = Depends(get_current_user)):
+async def list_books(
+    session: DBSession, 
+    _: User = Depends(RequirePermission("book.read"))):
     result = await session.exec(select(Book))
     books = result.all()
     return books
 
 @book_router.get("/{book_id}", response_model=Book)
-async def get_book(book_id: int, session: DBSession):
-    # optimized for primary key
+async def get_book(
+    book_id: int, 
+    session: DBSession,
+    _: User = Depends(get_current_user)
+):
+    # optimized query using get
+    # This is more efficient than using select and exec for a single record
     book = await session.get(Book, book_id)
     # general query
     # result = await session.exec(select(Book).where(Book.id == book_id))
@@ -35,15 +42,20 @@ async def get_book(book_id: int, session: DBSession):
 async def create_book(
     book: Book, 
     session: DBSession, 
-    current_user: User = Depends(RequirePermission("book.write"))):
-
+    _: User = Depends(RequirePermission("book.write"))
+):
     session.add(book)
     await session.commit()
     await session.refresh(book)
     return book
 
 @book_router.put("/{book_id}", response_model=Book)
-async def update_book(book_id: int, book_update: BookUpdate, session: DBSession):
+async def update_book(
+    book_id: int, 
+    book_update: BookUpdate, 
+    session: DBSession,
+    _: User = Depends(RequirePermission("book.write"))
+):
     db_book = await session.get(Book, book_id)
     if not db_book:
         raise HTTPException(status_code=404, detail="Book not found")
@@ -60,7 +72,7 @@ async def update_book(book_id: int, book_update: BookUpdate, session: DBSession)
 async def delete_book(
     book_id: int, 
     session: DBSession, 
-    current_user: User = Depends(RequirePermission("book.delete"))):
+    _: User = Depends(RequirePermission("book.delete"))):
 
     db_book = await session.get(Book, book_id)
     if not db_book:
